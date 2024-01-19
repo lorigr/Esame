@@ -1,0 +1,1310 @@
+@prefix : <http://www.modsem.org/ontologies/MusicGenreOntology#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@base <http://www.modsem.org/ontologies/MusicGenreOntology#> .
+
+<http://www.modsem.org/ontologies/MusicGenreOntology> rdf:type owl:Ontology ;
+                                                       dc:creator "Lorenzo Grassi" ,
+                                                                  "Samuele Monasterolo" ;
+                                                       dc:date "04/01/2024" ;
+                                                       dc:description "Ontologia focalizzata a descrivere principlamente i generi e sottogeneri musicali e rispettivi artisti"@it ;
+                                                       dc:title "Music Genre Ontology"@en ;
+                                                       vann:preferredNamespacePrefix "mgo" ;
+                                                       vann:preferredNamespaceUri "http://www.modsem.org/ontologies/MusicGenreOntology#" ;
+                                                       rdfs:label "MusicGenreOntology" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/elements/1.1/creator
+dc:creator rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/date
+dc:date rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/description
+dc:description rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/title
+dc:title rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+vann:preferredNamespacePrefix rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+vann:preferredNamespaceUri rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#campiona
+:campiona rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          rdf:type owl:TransitiveProperty ;
+          rdfs:domain :Brano ;
+          rdfs:range :Brano ;
+          rdfs:comment "un brano campiona (un segmento) di un altro brano"@it ;
+          rdfs:label "campiona"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#caratterizza
+:caratterizza rdf:type owl:ObjectProperty ;
+              owl:inverseOf :caratterizzatoDa ;
+              rdf:type owl:FunctionalProperty ;
+              rdfs:domain :StrumentoMusicale ;
+              rdfs:range :Genere ;
+              rdfs:comment "uno strumento musicale caratterizza un genere musicale"@it ;
+              rdfs:label "caratterizza" .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#caratterizzatoDa
+:caratterizzatoDa rdf:type owl:ObjectProperty ,
+                           owl:InverseFunctionalProperty ;
+                  rdfs:domain :Genere ;
+                  rdfs:range :StrumentoMusicale ;
+                  rdfs:comment "un genere è caratterizzato da uno strumento musicale"@it ;
+                  rdfs:label "caratterizzato da"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#collaboraCon
+:collaboraCon rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              rdf:type owl:IrreflexiveProperty ;
+              rdfs:domain :Artista ;
+              rdfs:range :Artista ;
+              rdfs:comment "un artista collabora con un altro artista"@it ;
+              rdfs:label "collabora con"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#collaboraSu
+:collaboraSu rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf owl:topObjectProperty ;
+             rdfs:domain :Artista ;
+             rdfs:range :Brano .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#contieneDiscografia
+:contieneDiscografia rdf:type owl:ObjectProperty ;
+                     owl:inverseOf :haGenere ;
+                     rdfs:domain :Genere ;
+                     rdfs:range :Brano ;
+                     rdfs:comment "un genere contiene una lista di brani"@it ;
+                     rdfs:label "contiene discografia"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#contieneRuolo
+:contieneRuolo rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty ;
+               owl:inverseOf :ruoloIn ;
+               rdfs:domain :Brano ;
+               rdfs:range :Ruolo ;
+               rdfs:comment "un brano contiene un ruolo interpretato da un artista"@it ;
+               rdfs:label "contiene ruolo"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#haGenere
+:haGenere rdf:type owl:ObjectProperty ;
+          rdfs:domain :Brano ;
+          rdfs:range :Genere ;
+          owl:propertyChainAxiom ( :utilizza
+                                   :caratterizza
+                                 ) ;
+          rdfs:comment "un brano ha un genere"@it ;
+          rdfs:label "ha genere"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#haRuolo
+:haRuolo rdf:type owl:ObjectProperty ;
+         owl:inverseOf :interpretatoDa ;
+         rdfs:domain :Artista ;
+         rdfs:range :Ruolo ;
+         rdfs:comment "un artista ha un ruolo all'interno di un brano"@it ;
+         rdfs:label "ha ruolo"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#interpretatoDa
+:interpretatoDa rdf:type owl:ObjectProperty ;
+                rdfs:domain :Ruolo ;
+                rdfs:range :Artista ;
+                rdfs:comment "il ruolo è interpretato da un artista"@it ;
+                rdfs:label "interpretato da"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ispira
+:ispira rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty ;
+        owl:inverseOf :ispiratoDa ;
+        rdf:type owl:TransitiveProperty ;
+        rdfs:domain :Artista ;
+        rdfs:range :Artista ;
+        rdfs:label "ispira"@it ,
+                   "un artista ispira un altro artista"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ispiratoDa
+:ispiratoDa rdf:type owl:ObjectProperty ,
+                     owl:TransitiveProperty ;
+            rdfs:domain :Artista ;
+            rdfs:range :Artista ;
+            rdfs:comment "un artista è ispirato da un altro artista"@it ;
+            rdfs:label "ispirato da"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#rilascia
+:rilascia rdf:type owl:ObjectProperty ;
+          owl:inverseOf :rilasciatoDa ;
+          rdfs:domain :Artista ;
+          rdfs:range :Brano ;
+          rdfs:comment "un artista rilascia un brano"@it ;
+          rdfs:label "rilascia"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#rilasciatoDa
+:rilasciatoDa rdf:type owl:ObjectProperty ;
+              rdfs:domain :Brano ;
+              rdfs:range :Artista ;
+              rdfs:comment "un brano è rilasciato da un artista"@it ;
+              rdfs:label "rilasciato da"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ruoloIn
+:ruoloIn rdf:type owl:ObjectProperty ;
+         rdfs:domain :Ruolo ;
+         rdfs:range :Brano ;
+         rdfs:comment "un ruolo (interpretato da un artista) è espresso in un brano"@it ;
+         rdfs:label "ruolo in"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#suona
+:suona rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf owl:topObjectProperty ;
+       rdfs:domain :Artista ;
+       rdfs:range :StrumentoMusicale ;
+       owl:propertyChainAxiom ( :rilascia
+                                :utilizza
+                              ) ;
+       rdfs:comment "un artista ha rilasciato una canzone in cui viene suonato uno strumento musicale"@it ;
+       rdfs:label "suona"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#utilizza
+:utilizza rdf:type owl:ObjectProperty ;
+          rdfs:domain :Brano ;
+          rdfs:range :StrumentoMusicale ;
+          rdfs:comment "un brano utilizza uno strumento musicale" ;
+          rdfs:label "utilizza"@it .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://purl.org/ontology/mo/bpm
+<http://purl.org/ontology/mo/bpm> rdf:type owl:DatatypeProperty ;
+                                  owl:equivalentProperty :BPM .
+
+
+###  http://purl.org/ontology/mo/key
+<http://purl.org/ontology/mo/key> rdf:type owl:DatatypeProperty ;
+                                  owl:equivalentProperty :chiave .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#BPM
+:BPM rdf:type owl:DatatypeProperty ;
+     rdfs:domain :Brano ;
+     rdfs:range xsd:int ;
+     rdfs:comment "I battiti per minuto (bpm) sono l'unità di misura di frequenza, usata principalmente per l'indicazione di quanti beat ci sono in un minuto in musica e per la misura della frequenza cardiaca."@it ;
+     rdfs:label "BPM"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#chiave
+:chiave rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Brano ;
+        rdfs:range xsd:string ;
+        rdfs:comment "La chiave, nella notazione musicale, è un simbolo posto sul pentagramma che ha la funzione di fissare la posizione delle note."@it ;
+        rdfs:label "chiave"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#durata
+:durata rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Brano ;
+        rdfs:range xsd:int ;
+        dc:description "Indica la durata del brano espressa in secondi" ;
+        rdfs:label "durata" .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#nazionalità
+:nazionalità rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Artista ;
+             rdfs:range xsd:string ;
+             rdfs:comment "nazionalità dell'artista"@it ;
+             rdfs:label "nazionalità"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#nomeCompleto
+:nomeCompleto rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Artista ;
+              rdfs:range xsd:string ;
+              rdfs:comment "indica il nome completo dell'artista, nel caso in cui sia conosciuto con un nome d'arte"@it ;
+              rdfs:label "nome completo"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#topRanking
+:topRanking rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Brano ;
+            rdfs:range xsd:int ;
+            dc:description "posizione massima del brano raggiunta nella classifica USA" ;
+            rdfs:label "top ranking" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://purl.org/ontology/mo/Genre
+<http://purl.org/ontology/mo/Genre> rdf:type owl:Class ;
+                                    owl:equivalentClass :Genere .
+
+
+###  http://purl.org/ontology/mo/Instrument
+<http://purl.org/ontology/mo/Instrument> rdf:type owl:Class ;
+                                         owl:equivalentClass :StrumentoMusicale .
+
+
+###  http://purl.org/ontology/mo/MusicArtist
+<http://purl.org/ontology/mo/MusicArtist> rdf:type owl:Class ;
+                                          owl:equivalentClass :Artista .
+
+
+###  http://purl.org/ontology/mo/Record
+<http://purl.org/ontology/mo/Record> rdf:type owl:Class ;
+                                     owl:equivalentClass :Brano .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Artista
+:Artista rdf:type owl:Class ;
+         rdfs:comment "persona che svolge una determinata attività in musica, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+         rdfs:label "Artista"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaClassico
+:ArtistaClassico rdf:type owl:Class ;
+                 owl:equivalentClass [ rdf:type owl:Restriction ;
+                                       owl:onProperty :rilascia ;
+                                       owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                                 [ rdf:type owl:Restriction ;
+                                                                                   owl:onProperty :haGenere ;
+                                                                                   owl:someValuesFrom :Classica
+                                                                                 ]
+                                                                               ) ;
+                                                            rdf:type owl:Class
+                                                          ]
+                                     ] ;
+                 rdfs:subClassOf :Artista ;
+                 rdfs:comment "persona che svolge una determinata attività in musica classica, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+                 rdfs:label "Artista classico"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaCountry
+:ArtistaCountry rdf:type owl:Class ;
+                owl:equivalentClass [ rdf:type owl:Restriction ;
+                                      owl:onProperty :rilascia ;
+                                      owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                                [ rdf:type owl:Restriction ;
+                                                                                  owl:onProperty :haGenere ;
+                                                                                  owl:someValuesFrom :Country
+                                                                                ]
+                                                                              ) ;
+                                                           rdf:type owl:Class
+                                                         ]
+                                    ] ;
+                rdfs:subClassOf :Artista ;
+                rdfs:comment "persona che svolge una determinata attività in musica country, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+                rdfs:label "Artista country" .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaDisco
+:ArtistaDisco rdf:type owl:Class ;
+              owl:equivalentClass [ rdf:type owl:Restriction ;
+                                    owl:onProperty :rilascia ;
+                                    owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                              [ rdf:type owl:Restriction ;
+                                                                                owl:onProperty :haGenere ;
+                                                                                owl:someValuesFrom :Disco
+                                                                              ]
+                                                                            ) ;
+                                                         rdf:type owl:Class
+                                                       ]
+                                  ] ;
+              rdfs:subClassOf :ArtistaEDM ;
+              rdfs:comment "persona che svolge una determinata attività in musica disco, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+              rdfs:label "Artista disco" .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaEDM
+:ArtistaEDM rdf:type owl:Class ;
+            owl:equivalentClass [ rdf:type owl:Restriction ;
+                                  owl:onProperty :rilascia ;
+                                  owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty :haGenere ;
+                                                                              owl:someValuesFrom :EDM
+                                                                            ]
+                                                                          ) ;
+                                                       rdf:type owl:Class
+                                                     ]
+                                ] ;
+            rdfs:subClassOf :Artista ;
+            rdfs:comment "persona che svolge una determinata attività in musica EDM, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+            rdfs:label "Artista EDM"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaHouse
+:ArtistaHouse rdf:type owl:Class ;
+              owl:equivalentClass [ rdf:type owl:Restriction ;
+                                    owl:onProperty :rilascia ;
+                                    owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                              [ rdf:type owl:Restriction ;
+                                                                                owl:onProperty :haGenere ;
+                                                                                owl:someValuesFrom :House
+                                                                              ]
+                                                                            ) ;
+                                                         rdf:type owl:Class
+                                                       ]
+                                  ] ;
+              rdfs:subClassOf :ArtistaEDM ;
+              rdfs:comment "persona che svolge una determinata attività in musica house, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+              rdfs:label "Artista house"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaKpop
+:ArtistaKpop rdf:type owl:Class ;
+             owl:equivalentClass [ rdf:type owl:Restriction ;
+                                   owl:onProperty :rilascia ;
+                                   owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                             [ rdf:type owl:Restriction ;
+                                                                               owl:onProperty :haGenere ;
+                                                                               owl:someValuesFrom :KPop
+                                                                             ]
+                                                                           ) ;
+                                                        rdf:type owl:Class
+                                                      ]
+                                 ] ;
+             rdfs:subClassOf :ArtistaPop ;
+             rdfs:comment "persona che svolge una determinata attività in musica Kpop, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+             rdfs:label "Artista KPop"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaMelodicTechno
+:ArtistaMelodicTechno rdf:type owl:Class ;
+                      owl:equivalentClass [ rdf:type owl:Restriction ;
+                                            owl:onProperty :rilascia ;
+                                            owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                                      [ rdf:type owl:Restriction ;
+                                                                                        owl:onProperty :haGenere ;
+                                                                                        owl:someValuesFrom :MelodicTechno
+                                                                                      ]
+                                                                                    ) ;
+                                                                 rdf:type owl:Class
+                                                               ]
+                                          ] ;
+                      rdfs:subClassOf :ArtistaTechno ;
+                      rdfs:comment "persona che svolge una determinata attività in musica melodic techno, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+                      rdfs:label "Artista melodic techno"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaMinimalHouse
+:ArtistaMinimalHouse rdf:type owl:Class ;
+                     owl:equivalentClass [ rdf:type owl:Restriction ;
+                                           owl:onProperty :rilascia ;
+                                           owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                                     [ rdf:type owl:Restriction ;
+                                                                                       owl:onProperty :haGenere ;
+                                                                                       owl:someValuesFrom :MinimalHouse
+                                                                                     ]
+                                                                                   ) ;
+                                                                rdf:type owl:Class
+                                                              ]
+                                         ] ;
+                     rdfs:subClassOf :ArtistaHouse ;
+                     rdfs:comment "persona che svolge una determinata attività in musica minimal house, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+                     rdfs:label "Artista minimal house"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaPop
+:ArtistaPop rdf:type owl:Class ;
+            owl:equivalentClass [ rdf:type owl:Restriction ;
+                                  owl:onProperty :rilascia ;
+                                  owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty :haGenere ;
+                                                                              owl:someValuesFrom :Pop
+                                                                            ]
+                                                                          ) ;
+                                                       rdf:type owl:Class
+                                                     ]
+                                ] ;
+            rdfs:subClassOf :Artista ;
+            rdfs:comment "persona che svolge una determinata attività in musica pop, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+            rdfs:label "Artista pop"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaRap
+:ArtistaRap rdf:type owl:Class ;
+            owl:equivalentClass [ rdf:type owl:Restriction ;
+                                  owl:onProperty :rilascia ;
+                                  owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty :haGenere ;
+                                                                              owl:someValuesFrom :Rap
+                                                                            ]
+                                                                          ) ;
+                                                       rdf:type owl:Class
+                                                     ]
+                                ] ;
+            rdfs:subClassOf :Artista ;
+            rdfs:comment "persona che svolge una determinata attività in musica rap, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+            rdfs:label "Artista rap"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ArtistaTechno
+:ArtistaTechno rdf:type owl:Class ;
+               owl:equivalentClass [ rdf:type owl:Restriction ;
+                                     owl:onProperty :rilascia ;
+                                     owl:someValuesFrom [ owl:intersectionOf ( :Brano
+                                                                               [ rdf:type owl:Restriction ;
+                                                                                 owl:onProperty :haGenere ;
+                                                                                 owl:someValuesFrom :Techno
+                                                                               ]
+                                                                             ) ;
+                                                          rdf:type owl:Class
+                                                        ]
+                                   ] ;
+               rdfs:subClassOf :ArtistaEDM ;
+               rdfs:comment "persona che svolge una determinata attività in musica techno, inerente alla creazione o all'esecuzione di composizioni strumentali, vocali, corali."@it ;
+               rdfs:label "Artista techno"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Brano
+:Brano rdf:type owl:Class ;
+       rdfs:comment "Un brano è una composizione vocale scritta per una o più voci perlopiù con accompagnamento strumentale."@it ;
+       rdfs:label "Brano"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#BranoFamoso
+:BranoFamoso rdf:type owl:Class ;
+             rdfs:subClassOf :Brano ;
+             rdfs:comment "brano il cui top ranking è maggiore o uguale a 5"@it ;
+             rdfs:label "Brano famoso" .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#BranoPolitrumentale
+:BranoPolitrumentale rdf:type owl:Class ;
+                     owl:equivalentClass [ rdf:type owl:Restriction ;
+                                           owl:onProperty :utilizza ;
+                                           owl:minQualifiedCardinality "3"^^xsd:nonNegativeInteger ;
+                                           owl:onClass :StrumentoMusicale
+                                         ] ;
+                     rdfs:subClassOf :Brano ;
+                     rdfs:comment "Brano che utilizza almeno 3 strumenti musicali diveri"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Classica
+:Classica rdf:type owl:Class ;
+          rdfs:subClassOf :Genere ;
+          rdfs:comment "Genere relativo alla musica classica"@it ;
+          rdfs:label "Classica"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Country
+:Country rdf:type owl:Class ;
+         rdfs:subClassOf :Genere ;
+         rdfs:comment "Genere relativo alla musica country"@it ;
+         rdfs:label "Country"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Disco
+:Disco rdf:type owl:Class ;
+       rdfs:subClassOf :EDM ;
+       rdfs:comment "Genere relativo alla musica disco"@it ;
+       rdfs:label "Disco"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#EDM
+:EDM rdf:type owl:Class ;
+     rdfs:subClassOf :Genere ;
+     rdfs:comment "Genere relativo alla musica EDM"@it ;
+     rdfs:label "EDM"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Genere
+:Genere rdf:type owl:Class ;
+        rdfs:comment "Genere musicale generale"@it ;
+        rdfs:label "Genere"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#House
+:House rdf:type owl:Class ;
+       rdfs:subClassOf :EDM ;
+       rdfs:comment "Genere relativo alla musica house"@it ;
+       rdfs:label "House"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#KPop
+:KPop rdf:type owl:Class ;
+      rdfs:subClassOf :Pop ;
+      rdfs:comment "Genere relativo alla musica kpop"@it ;
+      rdfs:label "KPop"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#MelodicTechno
+:MelodicTechno rdf:type owl:Class ;
+               rdfs:subClassOf :Techno ;
+               rdfs:comment "Genere relativo alla musica melodic techno"@it ;
+               rdfs:label "Melodic Techno"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#MinimalHouse
+:MinimalHouse rdf:type owl:Class ;
+              rdfs:subClassOf :House ;
+              rdfs:comment "Genere relativo alla musica minimal house"@it ;
+              rdfs:label "Minimal House"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Pop
+:Pop rdf:type owl:Class ;
+     rdfs:subClassOf :Genere ;
+     rdfs:comment "Genere relativo alla musica pop"@it ;
+     rdfs:label "Pop"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Rap
+:Rap rdf:type owl:Class ;
+     rdfs:subClassOf :Genere ;
+     rdfs:comment "Genere relativo alla musica rap"@it ;
+     rdfs:label "Rap"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Ruolo
+:Ruolo rdf:type owl:Class ;
+       rdfs:comment "Ruolo di un artista ricoperto nell'ambito di un brano"@it ;
+       rdfs:label "Ruolo" .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#RuoloCantante
+:RuoloCantante rdf:type owl:Class ;
+               rdfs:subClassOf :Ruolo ;
+               rdfs:comment "Ruolo di un* cantant* ricoperto nell'ambito di un brano"@it ;
+               rdfs:label "Ruolo di cantante"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#RuoloCompositore
+:RuoloCompositore rdf:type owl:Class ;
+                  rdfs:subClassOf :Ruolo ;
+                  rdfs:comment "Ruolo di un* compositore/compositrice ricoperto nell'ambito di un brano"@it ;
+                  rdfs:label "Ruolo di compositore"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#RuoloProduttore
+:RuoloProduttore rdf:type owl:Class ;
+                 rdfs:subClassOf :Ruolo ;
+                 rdfs:comment "Ruolo di un* produttore/prodruttrice ricoperto nell'ambito di un brano"@it ;
+                 rdfs:label "Ruolo di produttore"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#StrumentoEDM
+:StrumentoEDM rdf:type owl:Class ;
+              owl:equivalentClass [ rdf:type owl:Class ;
+                                    owl:oneOf ( :distorsore
+                                                :drumMachine
+                                                :sequencer
+                                                :sintetizzatore
+                                              )
+                                  ] ;
+              rdfs:subClassOf :StrumentoMusicale ;
+              rdfs:comment "Uno strumento musicale elettronico, più correttamente sintetizzatore analogico o elettrofono a oscillatori, è uno strumento musicale elettrofono che produce suoni per mezzo dell'elettronica analogica, emettendo un segnale audio elettrico che, a sua volta, pilota un altoparlante."@it ;
+              rdfs:label "Strumento EDM"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#StrumentoMusicale
+:StrumentoMusicale rdf:type owl:Class ;
+                   owl:equivalentClass [ rdf:type owl:Class ;
+                                         owl:oneOf ( :Banjo
+                                                     :basso
+                                                     :distorsore
+                                                     :drumMachine
+                                                     :pianoforte
+                                                     :sequencer
+                                                     :sintetizzatore
+                                                     :voce
+                                                   )
+                                       ] ;
+                   rdfs:comment "Uno strumento musicale, nel parlato anche solo strumento, è un oggetto costruito o modificato con lo scopo di produrre suoni organizzati rispondenti a esigenze culturali specifiche per la produzione della musica"@it ;
+                   rdfs:label "Strumento musicale"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Techno
+:Techno rdf:type owl:Class ;
+        rdfs:subClassOf :EDM ;
+        rdfs:comment "Genere relativo alla musica techno"@it ;
+        rdfs:label "Techno"@it .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ANOTR
+:ANOTR rdf:type owl:NamedIndividual ,
+                :ArtistaEDM ;
+       rdfs:comment "Duo di artisti chiamato ANOTR"@it ;
+       rdfs:label "ANOTR"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Anyma
+:Anyma rdf:type owl:NamedIndividual ,
+                :ArtistaMelodicTechno ;
+       owl:sameAs <http://www.wikidata.org/entity/Q99678050> ;
+       :nomeCompleto "Matteo Milleri" ;
+       rdfs:comment "Artista italiano chiamato Anyma"@it ;
+       rdfs:label "Anyma"@it .
+
+
+###  http://www.wikidata.org/entity/Q99678050
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#BTS
+:BTS rdf:type owl:NamedIndividual ,
+              :Artista ;
+     owl:sameAs <http://www.wikidata.org/entity/Q13580495> ;
+     :nazionalità "coreana" ;
+     rdfs:comment "Gruppo di artisti chiamato BTS"@it ;
+     rdfs:label "BTS"@en .
+
+
+###  http://www.wikidata.org/entity/Q13580495
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Banjo
+:Banjo rdf:type owl:NamedIndividual ;
+       owl:sameAs <http://www.wikidata.org/entity/Q258896> ;
+       :caratterizza :genereCountry ;
+       rdfs:comment "Il banjo è un cordofono di origini africane, già popolare fra gli afroamericani durante la guerra di secessione americana nella sua versione a cinque corde e da allora largamente usato nella musica tradizionale nordamericana."@it ;
+       rdfs:label "banjo"@it .
+
+
+###  http://www.wikidata.org/entity/Q258896
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#BlindingLights
+:BlindingLights rdf:type owl:NamedIndividual ,
+                         :Brano ;
+                owl:sameAs <http://www.wikidata.org/entity/Q76566134> ;
+                :rilasciatoDa :TheWeeknd ;
+                :utilizza :basso ,
+                          :sintetizzatore ,
+                          :voce ;
+                rdfs:comment "Brano intitolato \"Blinding Lights\""@it ;
+                rdfs:label "Blinding Lights"@en .
+
+
+###  http://www.wikidata.org/entity/Q76566134
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Dimmish
+:Dimmish rdf:type owl:NamedIndividual ,
+                  :ArtistaMinimalHouse ;
+         :rilascia :Fever ;
+         rdfs:comment "Artista chiamato Dimmish"@it ;
+         rdfs:label "Dimmish"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Dynamite
+:Dynamite rdf:type owl:NamedIndividual ,
+                   :Brano ;
+          owl:sameAs <http://www.wikidata.org/entity/Q98073193> ;
+          :haGenere :genereKPop ;
+          :rilasciatoDa :BTS ;
+          :utilizza :voce ;
+          rdfs:comment "Brano intitolato Dynamite"@it ,
+                       "Dynamite"@it .
+
+
+###  http://www.wikidata.org/entity/Q98073193
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Eminem
+:Eminem rdf:type owl:NamedIndividual ;
+        owl:sameAs <http://www.wikidata.org/entity/Q5608> ;
+        :collaboraSu :TheHillsEminemRemix ;
+        :haRuolo :cantanteTheHillsRemix ;
+        rdfs:comment "artista di nome Eminem"@it ;
+        rdfs:label "Eminem"@en .
+
+
+###  http://www.wikidata.org/entity/Q5608
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#FadeOut
+:FadeOut rdf:type owl:NamedIndividual ,
+                  :Brano ;
+         :utilizza :drumMachine ;
+         :BPM "132"^^xsd:int ;
+         :chiave "4b" ;
+         :durata "231"^^xsd:int ;
+         :topRanking "15"^^xsd:int ;
+         rdfs:comment "Brano intitolato \"Fade Out\""@it ;
+         rdfs:label "Fade Out"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Fever
+:Fever rdf:type owl:NamedIndividual ,
+                :Brano ;
+       :utilizza :distorsore ,
+                 :drumMachine ;
+       rdfs:comment "Brano intitolato \"Fever\""@it ;
+       rdfs:label "Fever"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#HigherPower
+:HigherPower rdf:type owl:NamedIndividual ,
+                      :Brano ;
+             :rilasciatoDa :Anyma ;
+             :utilizza :basso ;
+             :BPM "126"^^xsd:int ;
+             rdfs:comment "Brano intitolato \"Higher Power\""@it ;
+             rdfs:label "Higher Power"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Hungover
+:Hungover rdf:type owl:NamedIndividual ,
+                   :Brano ;
+          :BPM "136"^^xsd:int ;
+          :chiave "7a" ;
+          :durata "257"^^xsd:int ;
+          :topRanking "10"^^xsd:int ;
+          rdfs:comment "Brano intitolato \"Hungover\"" ;
+          rdfs:label "Hungover"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Hypnotized
+:Hypnotized rdf:type owl:NamedIndividual ;
+            owl:sameAs <http://www.wikidata.org/entity/Q96463307> ;
+            :rilasciatoDa :PurpleDiscoMachine ;
+            :utilizza :sintetizzatore ;
+            rdfs:comment "Brano intitolato Hypnotized"@it ;
+            rdfs:label "Hypnotized"@en .
+
+
+###  http://www.wikidata.org/entity/Q96463307
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#John_Summit
+:John_Summit rdf:type owl:NamedIndividual ,
+                      :Artista ;
+             owl:sameAs <http://www.wikidata.org/entity/Q120531443> ;
+             :rilascia :FadeOut ,
+                       :Hungover ,
+                       :Legacy ;
+             rdfs:comment "Artista conosciuto come \"John Summit\""@it ;
+             rdfs:label "John Summit"@en .
+
+
+###  http://www.wikidata.org/entity/Q120531443
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#LeOnde
+:LeOnde rdf:type owl:NamedIndividual ;
+        :rilasciatoDa :LudovicoEinaudi ;
+        :utilizza :pianoforte ;
+        rdfs:comment "Brano intitolato Le Onde" ;
+        rdfs:label "Le Onde" .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#Legacy
+:Legacy rdf:type owl:NamedIndividual ,
+                 :Brano ;
+        :utilizza :drumMachine ;
+        :BPM "128"^^xsd:int ;
+        :chiave "12b" ;
+        :durata 318 ;
+        :topRanking "1"^^xsd:int ;
+        rdfs:comment "brano intitolato \"Legacy\""@it ;
+        rdfs:label "Legacy"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#LudovicoEinaudi
+:LudovicoEinaudi rdf:type owl:NamedIndividual ,
+                          :ArtistaClassico ;
+                 owl:sameAs <http://www.wikidata.org/entity/Q83182> ;
+                 rdfs:comment "Artista conosciuto come \"Ludovico Einaudi\""@it ;
+                 rdfs:label "Ludovico Einaudi"@it .
+
+
+###  http://www.wikidata.org/entity/Q83182
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#MidnightPretenders
+:MidnightPretenders rdf:type owl:NamedIndividual ,
+                             :Brano ;
+                    rdfs:comment "Brano intitolato \"Midnight Pretenders\""@it ;
+                    rdfs:label "Midnight Pretenders"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#OutOfTime
+:OutOfTime rdf:type owl:NamedIndividual ,
+                    :Brano ;
+           owl:sameAs <http://www.wikidata.org/entity/Q110628661> ;
+           :campiona :MidnightPretenders ;
+           :rilasciatoDa :TheWeeknd ;
+           :utilizza :basso ,
+                     :voce ;
+           rdfs:comment "brano intitolato \"Blinding Lights\""@it ;
+           rdfs:label "Out Of Time"@en .
+
+
+###  http://www.wikidata.org/entity/Q110628661
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#PeggyGou
+:PeggyGou rdf:type owl:NamedIndividual ,
+                   :ArtistaHouse ;
+          owl:sameAs <http://www.wikidata.org/entity/Q64158576> ;
+          rdfs:comment "Artista conosciuta come \"Peggy Gou\""@it ;
+          rdfs:label "Peggy Gou"@en .
+
+
+###  http://www.wikidata.org/entity/Q64158576
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#PurpleDiscoMachine
+:PurpleDiscoMachine rdf:type owl:NamedIndividual ,
+                             :ArtistaDisco ;
+                    owl:sameAs <http://www.wikidata.org/entity/Q61746813> ;
+                    rdfs:comment "Artista conosciuto come \"Purple Disco Machine\""@it ;
+                    rdfs:label "Purple Disco Machine"@en .
+
+
+###  http://www.wikidata.org/entity/Q61746813
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#TaylorSwift
+:TaylorSwift rdf:type owl:NamedIndividual ,
+                      :ArtistaCountry ,
+                      :ArtistaPop ;
+             owl:sameAs <http://www.wikidata.org/entity/Q26876> ;
+             :rilascia :WildestDream ;
+             rdfs:comment "Artista conosciuta come \"Taylor Swift\""@it ;
+             rdfs:label "Taylor Swift"@en .
+
+
+###  http://www.wikidata.org/entity/Q26876
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#TheHillsEminemRemix
+:TheHillsEminemRemix rdf:type owl:NamedIndividual ,
+                              :Brano ;
+                     rdfs:comment "Brano intitolato \"The Hills - Remix\""@it ;
+                     rdfs:label "The Hills - Remix"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#TheWeeknd
+:TheWeeknd rdf:type owl:NamedIndividual ,
+                    :Artista ;
+           owl:sameAs <http://www.wikidata.org/entity/Q2121062> ;
+           :haRuolo :cantanteBlindingLights ,
+                    :cantanteTheHillsRemix ,
+                    :compositoreBlindingLights ,
+                    :produttoreBlindingLights ;
+           :ispira :ToryLanez ;
+           :nomeCompleto "Abel Makkonen Tesfaye" ;
+           rdfs:comment "Artista conosciuto come \"The Weeknd\""@it ;
+           rdfs:label "The Weeknd"@en .
+
+
+###  http://www.wikidata.org/entity/Q2121062
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#TomokoAran
+:TomokoAran rdf:type owl:NamedIndividual ,
+                     :Artista ;
+            :ispira :TheWeeknd ;
+            rdfs:comment "Artista chiamata \"Tomoko Aran\""@it ;
+            rdfs:label "Tomoko Aran"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#ToryLanez
+:ToryLanez rdf:type owl:NamedIndividual ,
+                    :Artista ;
+           rdfs:comment "Artista chiamato \"Tory Lanez\""@it ;
+           rdfs:label "Tory Lanez"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#WildestDream
+:WildestDream rdf:type owl:NamedIndividual ,
+                       :Brano ;
+              owl:sameAs <http://www.wikidata.org/entity/Q20882673> ;
+              :utilizza :voce ;
+              :BPM "140"^^xsd:int ;
+              :chiave "4b" ;
+              :durata "220"^^xsd:int ;
+              :topRanking "5"^^xsd:int ;
+              rdfs:comment "Brano intitolato \"Wildest Dream\""@it ;
+              rdfs:label "Wildest Dream"@en .
+
+
+###  http://www.wikidata.org/entity/Q20882673
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#YouBelongWithMe
+:YouBelongWithMe rdf:type owl:NamedIndividual ;
+                 :rilasciatoDa :TaylorSwift ;
+                 :utilizza :Banjo ;
+                 rdfs:comment "Brano intitolato You Belong With Me"@it ;
+                 rdfs:label "You Belong With Me"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#basso
+:basso rdf:type owl:NamedIndividual ;
+       owl:sameAs <http://www.wikidata.org/entity/Q46185> ;
+       rdfs:comment "Il termine basso descrive uno strumento musicale in grado di produrre suoni nel registro grave difficilmente udibili, specialmente durante i concerti live. I bassi comprendono diverse famiglie di strumenti: generalmente hanno una funzione di accompagnamento e sostegno armonico della melodia, come nella pratica del basso continuo, ma possono coprire una vasta gamma di ruoli musicali. Producendo suoni di bassa frequenza, di solito richiedono una lunga colonna d'aria o lunghe corde: solitamente i bassi tra i cordofoni e i fiati sono gli strumenti più grandi delle rispettive famiglie."@it ;
+       rdfs:label "basso"@it .
+
+
+###  http://www.wikidata.org/entity/Q46185
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#cantanteBlindingLights
+:cantanteBlindingLights rdf:type owl:NamedIndividual ,
+                                 :RuoloCantante ;
+                        :ruoloIn :BlindingLights ;
+                        rdfs:comment "ruolo di cantante nel brano \"Blinding Lights\""@it ;
+                        rdfs:label "cantante di Blinding Lights"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#cantanteTheHillsRemix
+:cantanteTheHillsRemix rdf:type owl:NamedIndividual ,
+                                :RuoloCantante ;
+                       :ruoloIn :TheHillsEminemRemix ;
+                       rdfs:comment "ruolo di cantante di The Hills Remix"@it ;
+                       rdfs:label "cantante The Hills Remix"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#compositoreBlindingLights
+:compositoreBlindingLights rdf:type owl:NamedIndividual ,
+                                    :RuoloCompositore ;
+                           :ruoloIn :BlindingLights ;
+                           rdfs:comment "ruolo di compositore in \"Blinding Lights\""@it ;
+                           rdfs:label "compositore Blinding Lights"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#distorsore
+:distorsore rdf:type owl:NamedIndividual ;
+            rdfs:comment "Distortion and overdrive are forms of audio signal processing used to alter the sound of amplified electric musical instruments, usually by increasing their gain, producing a \"fuzzy\", \"growling\", or \"gritty\" tone. Distortion is most commonly used with the electric guitar, but may also be used with other electric instruments such as electric bass, electric piano, synthesizer and Hammond organ."@en ;
+            rdfs:label "distorsore"@it ,
+                       "distortion"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#drumMachine
+:drumMachine rdf:type owl:NamedIndividual ;
+             owl:sameAs <http://www.wikidata.org/entity/Q831698> ;
+             :caratterizza :genereHouse ;
+             rdfs:comment "Una drum-machine è uno strumento musicale elettronico progettato per eseguire ritmi imitando il suono degli strumenti a percussione. Prima dell'avvento del MIDI, le drum machine contenevano quasi sempre, oltre a un modulo di generazione del suono, un sequenziatore interno."@it ;
+             rdfs:label "drum-machine"@en .
+
+
+###  http://www.wikidata.org/entity/Q831698
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereClassico
+:genereClassico rdf:type owl:NamedIndividual ,
+                         :Classica ;
+                owl:sameAs <http://www.wikidata.org/entity/Q9730> ;
+                rdfs:comment "Col termine musica classica ci si riferisce alla musica colta, sacra e profana, composta o avente radici nel contesto della cultura occidentale. Essa abbraccia approssimativamente un arco di tempo che comincia dall'XI secolo e si estende fino al XX secolo o, a seconda delle convenzioni, fino all'età contemporanea. Tale periodo include, in particolare, il periodo caratterizzato dallo sviluppo e impiego prevalente dell'armonia tonale, codificata tra il XVII e il XIX secolo. In contesti più specializzati il termine \"musica classica\" può essere anche riferito, in senso più restrittivo, al periodo musicale detto Classicismo, ma nel linguaggio comune l'espressione è intesa nel suo significato più esteso (in opposizione a musica leggera o a musica popolare)."@it ;
+                rdfs:label "genere classico"@it .
+
+
+###  http://www.wikidata.org/entity/Q9730
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereCountry
+:genereCountry rdf:type owl:NamedIndividual ,
+                        :Country ;
+               owl:sameAs <http://www.wikidata.org/entity/Q83440> ;
+               rdfs:comment "Il country, anche detto country music, country and western o country-western, è il risultato dell'unione di forme popolari della musica americana sviluppatasi nel sud degli Stati Uniti. Viene spesso identificato come un genere musicale a sé stante."@it ;
+               rdfs:label "genere country"@it .
+
+
+###  http://www.wikidata.org/entity/Q83440
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereDisco
+:genereDisco rdf:type owl:NamedIndividual ,
+                      :Disco ;
+             owl:sameAs <http://www.wikidata.org/entity/Q58339> ;
+             rdfs:comment "Disco is a genre of dance music and a subculture that emerged in the 1970s from the United States' urban nightlife scene. Its sound is typified by four-on-the-floor beats, syncopated basslines, string sections, brass and horns, electric piano, synthesizers, and electric rhythm guitars."@en ;
+             rdfs:label "genere disco"@it .
+
+
+###  http://www.wikidata.org/entity/Q58339
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereEDM
+:genereEDM rdf:type owl:NamedIndividual ,
+                    :EDM ;
+           owl:sameAs <http://www.wikidata.org/entity/Q851213> ;
+           rdfs:comment "L'electronic dance music (conosciuta anche come EDM, musica dance, club music, o semplicemente dance), è una vasta gamma di generi musicali elettronici a percussione creati soprattutto per discoteche, rave e festival. L'EDM è generalmente creata per essere riprodotta dai disc jockey (DJ) che creano una selezione di tracce senza soluzione di continuità, chiamato mashup, che si susseguono senza interruzione da una registrazione ad un'altra. I produttori EDM eseguono anche la loro musica dal vivo in un contesto di un concerto o di un festival, in ciò che qualche volta viene chiamato un live PA. Nel Regno Unito e in Europa continentale, l'EDM è più comunemente chiamata \"musica dance\" o semplicemente \"dance\"."@it ;
+           rdfs:label "genere EDM"@it .
+
+
+###  http://www.wikidata.org/entity/Q851213
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereHouse
+:genereHouse rdf:type owl:NamedIndividual ,
+                      :House ;
+             owl:sameAs <http://www.wikidata.org/entity/Q20502> ;
+             rdfs:comment "L'house è un genere musicale appartenente alla electronic dance music (EDM), nato nelle discoteche di Chicago e New York nella prima metà degli anni ottanta e fortemente influenzata dalla disco music e da elementi del funk dei tardi anni settanta. Il nome house deriva dal Warehouse, storico locale di Chicago il cui dj resident Frankie Knuckles, soprannominato The Godfather of House, è riconosciuto come il creatore."@en ;
+             rdfs:label "genere house"@it .
+
+
+###  http://www.wikidata.org/entity/Q20502
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereKPop
+:genereKPop rdf:type owl:NamedIndividual ,
+                     :KPop ;
+            owl:sameAs <http://www.wikidata.org/entity/Q213665> ;
+            rdfs:comment "genere musicale chiamato KPop"@it ;
+            rdfs:label "genere kpop"@it .
+
+
+###  http://www.wikidata.org/entity/Q213665
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereMelodicTechno
+:genereMelodicTechno rdf:type owl:NamedIndividual ,
+                              :MelodicTechno ;
+                     rdfs:comment "Melodic techno distances itself from the harder, drop-oriented techno that was popular worldwide until the late 2010s. Enigmatic synths, combined with enveloping basslines and hypnotic beats, make melodic techno the natural successor of 90’s trance, a genre which later evolved into a more bass-heavy, energizing style."@en ;
+                     rdfs:label "genere melodic techno"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereMinimalHouse
+:genereMinimalHouse rdf:type owl:NamedIndividual ,
+                             :MinimalHouse ;
+                    rdfs:comment "Minimal house is a subgenre of house music. It is characterized by a stripped-down aesthetic that exploits the use of repetition and understated development. Minimal techno is thought to have been originally developed in the early 1990s by Detroit-based producers Robert Hood and Daniel Bell.[3][4] By the early 2000s the term 'minimal' generally described a style of techno that was popularized in Germany by labels such as Kompakt, Perlon, and Richie Hawtin's M-nus, among others."@en ;
+                    rdfs:label "genere minimal house"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#generePop
+:generePop rdf:type owl:NamedIndividual ,
+                    :Pop ;
+           owl:sameAs <http://www.wikidata.org/entity/Q37073> ;
+           rdfs:comment "La musica pop, traduzione del termine inglese pop music o comunemente pop, è un genere musicale appartenente all'insieme della popular music, che trova origine, nella sua forma moderna, come derivazione del rock and roll"@it ;
+           rdfs:label "genere pop"@it .
+
+
+###  http://www.wikidata.org/entity/Q37073
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereRap
+:genereRap rdf:type owl:NamedIndividual ,
+                    :Rap ;
+           rdfs:label "genere rap"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#genereTechno
+:genereTechno rdf:type owl:NamedIndividual ,
+                       :Techno ;
+              owl:sameAs <http://www.wikidata.org/entity/Q170611> ;
+              rdfs:comment "La techno è un genere musicale nato a Detroit, negli Stati Uniti d'America, negli anni ottanta e appartenente alla electronic dance music."@it ;
+              rdfs:label "genere techno"@it .
+
+
+###  http://www.wikidata.org/entity/Q170611
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#pianoforte
+:pianoforte rdf:type owl:NamedIndividual ;
+            :caratterizza :genereClassico ;
+            rdfs:comment "Il pianoforte è uno strumento musicale a corde percosse mediante martelletti, azionati da una tastiera. L'origine del termine è italiana ed è riferito alla possibilità di suonare note a volumi diversi in base al tocco, effetto non ottenibile in strumenti a tastiera precedenti, quali il clavicembalo."@it ;
+            rdfs:label "pianoforte"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#produttoreBlindingLights
+:produttoreBlindingLights rdf:type owl:NamedIndividual ,
+                                   :RuoloProduttore ;
+                          :ruoloIn :BlindingLights ;
+                          rdfs:comment "ruolo di produttore nel brano Blinding Lights"@it ;
+                          rdfs:label "produttore Blinding Lights"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#sequencer
+:sequencer rdf:type owl:NamedIndividual ;
+           :caratterizza :genereTechno ;
+           rdfs:comment "Il sequencer (traducibile come \"sequenziatore\") è un dispositivo di tipo sia fisico (hardware), sia logico (software), utilizzato nel campo musicale per la creazione, gestione e riproduzione di sequenze di segnali di controllo, che consentono di comandare uno strumento musicale elettronico."@it ;
+           rdfs:label "sequencer"@en .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#sintetizzatore
+:sintetizzatore rdf:type owl:NamedIndividual ;
+                :caratterizza :genereDisco ;
+                rdfs:comment "Il sintetizzatore (abbreviato anche in synth dal termine in inglese synthesizer) è uno strumento musicale che appartiene alla famiglia degli elettrofoni. È un apparato in grado di generare segnali elettrici, sotto il controllo di un operatore (non necessariamente un musicista) o di un segnale a bassa frequenza automatizzato. Si tratta di uno strumento che può generare imitazioni di strumenti musicali reali o creare suoni ed effetti non esistenti in natura. Attualmente troviamo anche sintetizzatori virtuali (VST, AU, RTAS standard lanciato nel 1997), che assolvono a questo compito interamente a livello software e che si appoggiano su schede sonore interne o esterne collegate ad un personal computer."@it ;
+                rdfs:label "sintetizzatore"@it .
+
+
+###  http://www.modsem.org/ontologies/MusicGenreOntology#voce
+:voce rdf:type owl:NamedIndividual ;
+      :caratterizza :generePop ;
+      rdfs:comment """Il canto o musica vocale è l'atto di creare suoni musicali per mezzo della voce umana.
+
+Il canto si articola di solito su un testo, anche se non necessariamente."""@it ;
+      rdfs:label "voce"@it .
+
+
+###  http://www.wikidata.org/entity/Q110628661
+<http://www.wikidata.org/entity/Q110628661> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q120531443
+<http://www.wikidata.org/entity/Q120531443> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q13580495
+<http://www.wikidata.org/entity/Q13580495> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q170611
+<http://www.wikidata.org/entity/Q170611> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q20502
+<http://www.wikidata.org/entity/Q20502> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q20882673
+<http://www.wikidata.org/entity/Q20882673> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q2121062
+<http://www.wikidata.org/entity/Q2121062> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q213665
+<http://www.wikidata.org/entity/Q213665> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q258896
+<http://www.wikidata.org/entity/Q258896> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q26876
+<http://www.wikidata.org/entity/Q26876> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q37073
+<http://www.wikidata.org/entity/Q37073> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q46185
+<http://www.wikidata.org/entity/Q46185> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q5608
+<http://www.wikidata.org/entity/Q5608> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q58339
+<http://www.wikidata.org/entity/Q58339> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q61746813
+<http://www.wikidata.org/entity/Q61746813> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q64158576
+<http://www.wikidata.org/entity/Q64158576> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q76566134
+<http://www.wikidata.org/entity/Q76566134> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q831698
+<http://www.wikidata.org/entity/Q831698> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q83182
+<http://www.wikidata.org/entity/Q83182> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q83440
+<http://www.wikidata.org/entity/Q83440> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q851213
+<http://www.wikidata.org/entity/Q851213> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q96463307
+<http://www.wikidata.org/entity/Q96463307> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q9730
+<http://www.wikidata.org/entity/Q9730> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q98073193
+<http://www.wikidata.org/entity/Q98073193> rdf:type owl:NamedIndividual .
+
+
+###  http://www.wikidata.org/entity/Q99678050
+<http://www.wikidata.org/entity/Q99678050> rdf:type owl:NamedIndividual .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :ANOTR
+                        :Anyma
+                        :Dimmish
+                        :Eminem
+                        :John_Summit
+                        :LudovicoEinaudi
+                        :PeggyGou
+                        :PurpleDiscoMachine
+                        :TaylorSwift
+                        :TheWeeknd
+                        :TomokoAran
+                        :ToryLanez
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :Banjo
+                        :basso
+                        :distorsore
+                        :drumMachine
+                        :pianoforte
+                        :sequencer
+                        :sintetizzatore
+                        :voce
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :BlindingLights
+                        :Dynamite
+                        :FadeOut
+                        :Fever
+                        :HigherPower
+                        :Hungover
+                        :Legacy
+                        :OutOfTime
+                        :TheHillsEminemRemix
+                        :WildestDream
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :FadeOut
+                        :Hungover
+                        :Legacy
+                      )
+] .
+
+
+###  Generated by the OWL API (version 4.5.26.2023-07-17T20:34:13Z) https://github.com/owlcs/owlapi
